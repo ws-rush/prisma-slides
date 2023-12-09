@@ -1,0 +1,15 @@
+{
+  "name": "prismaorm",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev --open --port 3031",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.45.0",
+    "@slidev/theme-default": "latest",
+    "@slidev/theme-seriph": "latest"
+  }
+}
