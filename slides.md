@@ -678,6 +678,10 @@ const user = await prisma.user.create({
 
 ## one to many: user can have many posts, but post have one author
 
+>there is types for one-to-many relations, like:
+>- attribute relation
+>- link relation
+
 ```js
 model User {
 	id	Int	@id @default(autoincrement())
