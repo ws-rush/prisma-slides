@@ -612,6 +612,10 @@ main()
 
 ## one to one: user have one profile and profile have one user
 
+>there is types of one-to-one relations, like:
+>Mutual One-to-One: Both entities in the relationship are also "parents" in a one-to-one relationship with each other. For example, consider a husband entity and a wife entity, each linked to the other.
+>Exclusive One-to-One: One entity is the "owner" of the relationship, and the other is dependent on it
+
 ```js
 model User {
 	id	Int	@id @default(autoincrement())
