@@ -159,9 +159,14 @@ apply constrains or functions on fields
 model User {
 	name	String	@id @default(uuid())
 
-	@@unique([age, name]) // rows with same two fields values should be unique
-	@@index([email]) // create index on field/s
-	@@id([name, age]) // remove above primary key (id), and use id from these two fields
+  // rows with same two fields values should be unique
+  @@unique([age, name])
+	
+  // create index on field/s
+  @@index([email])
+  
+  // remove above primary key (id), and use id from these two fields
+  @@id([name, age]) 
 }
 ```
 
