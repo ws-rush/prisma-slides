@@ -215,7 +215,7 @@ layout: center
 
 # CRUD
 
-<div class="grid grid-cols-2 gap-2">
+<div class="grid grid-cols-3 gap-2">
 
 <div class="flex flex-col">
 
@@ -235,10 +235,18 @@ const article = await prisma.article.create({
 	data: {
 		title: 'John First Article',
 		body: 'This is john first article',
-		author: { connect: { id: 1 } }
+		author: { 
+			connect: { 
+				id: 1 
+			} 
+		}
 	}
 })
 ```
+
+</div>
+
+<div class="flex flex-col">
 
 ```js
 // Create user and article and associate them
@@ -246,11 +254,22 @@ const user = await prisma.user.create({
 	data: {
 		name: 'Sara Smith',
 		email: 'sara@gmail.com',
-		articles: { create: { title: 'Saras first article', body: 'This is saras first article' } }
+		articles: { 
+			create: { 
+				title: 'Saras first article', 
+				body: 'This is saras first article' 
+			} 
+		}
 	}
 })
 ```
 
+```js
+// create many
+const user = await prisma.user.create({
+	data: [{}, {}]
+})
+```
 </div>
 
 <div class="flex flex-col">
@@ -312,15 +331,15 @@ enhance DX with local and online tools
 
 ---
 
-# Relationships
+# Relationships: one to one
 
-## one to one: user have one profile and profile have one user
+user have one profile and profile have one user
 
 >there is types of one-to-one relations, like:
->Mutual One-to-One: Both entities in the relationship are also "parents" in a one-to-one relationship with each other. For example, consider a husband entity and a wife entity, each linked to the other.
->Exclusive One-to-One: One entity is the "owner" of the relationship, and the other is dependent on it
+>- Mutual One-to-One: Both entities in the relationship are also "parents" in a one-to-one relationship with each other. For example, consider a husband entity and a wife entity, each linked to the other.
+>- Exclusive One-to-One: One entity is the "owner" of the relationship, and the other is dependent on it
 
-```js
+```prisma
 model User {
 	id	Int	@id @default(autoincrement())
 	email	String	@unique
@@ -335,7 +354,9 @@ model Profile {
 	userId	Int	@unique // it should be @unique coz we want one Profile only reference one User
 	user User	@relation(fields: [userId], refrences: [id])
 }
+```
 
+```js
 // 1. create user then profile
 const user = await prisma.user.create({ data: {} })
 
@@ -353,7 +374,7 @@ prisma.user.findUnique({
 
 // { id: 1, email: 'test@gmail.com' }
 
-// get use data included profile all props
+// get user data included profile all props
 prisma.user.findUnique({
 	where: { id: user.id },
 	include: { profile: true }
@@ -384,13 +405,21 @@ const user = await prisma.user.create({
 })
 ```
 
-## one to many: user can have many posts, but post have one author
+---
 
->there is types for one-to-many relations, like:
+# Relationships: one to many
+
+user can have many posts, but post have one author
+
+<div class="grid grid-cols-2 gap-2">
+
+<div>
+
+>one-to-many relations came from relations like:
 >- attribute relation
 >- link relation
 
-```js
+```prisma
 model User {
 	id	Int	@id @default(autoincrement())
 	email	String	@unique
@@ -403,7 +432,11 @@ model Post {
 	userId	Int	// it can be @unique, this mean every post should have id of a user
 	user User	@relation(fields: [userId], refrences: [id])
 }
+```
 
+</div>
+
+```js
 // create post
 const post = await prisma.post.create({
 	data: {
@@ -424,9 +457,15 @@ prisma.user.findMany({
 // { id: 1, email: 'test@gmail.com', posts: [{ name: 'Post1' }] }
 ```
 
-## ambigous one to many: some times we have one to maney relation to same table more than one time, in this case we should give these relations names
+</div>
 
-```prisma
+---
+
+# Relationships: one to many
+
+if there is one-to-maney relation to same table more than one time, we should give these relations names
+
+```prisma {all|7-8|17|20|all}
 model User {
 	id	String	@id @default(uuid())
 	name	String
@@ -451,9 +490,13 @@ model Post {
 }
 ```
 
-## implicit many to many: many diffrent posts associated with any diffrent tags, normally need intermidiary table
+---
 
-mode, and prisam in this case handle this intermiary table for us (create and name it under the hood)
+# Relationships: implicit many to many
+
+many diffrent posts associated with any diffrent tags, normally need intermidiary table, prisam in this case handle this intermiary table for us (create and name it under the hood)
+
+<div class="grid grid-cols-2 gap-2">
 
 ```prisma
 model Post {
@@ -466,7 +509,9 @@ model Tag {
 	id Int	@id @default(autoincrement())
 	posts Post[]
 }
+```
 
+```js
 prisma.post.findMany({
 	include: {
 		tags: true
@@ -476,7 +521,15 @@ prisma.post.findMany({
 // { id: 1, title: 'Post1', tags: [{ id: 2 }] }
 ```
 
-## explicit many to many: use them if you need add other props to relation as `timestamp` or `quantity`, or if you need more flexible queries
+</div>
+
+---
+
+# Relationships: explicit many to many
+
+use them if you need add other props to relation as `timestamp` or `quantity`, or if you need more flexible queries
+
+<div class="grid grid-cols-2 gap-2">
 
 ```prisma
 model Post {
@@ -499,7 +552,9 @@ model PostTag {
 
 	@@id([postId, tagId])
 }
+```
 
+```js
 prisma.post.findMany({
 	include: {
 		tags: true
@@ -509,9 +564,19 @@ prisma.post.findMany({
 // { id: 1, title: 'Post1', tags: [{ id: 2 }] }
 ```
 
-## self reference many to many: a category can have a parent category and a parent category can have multiple children
+</div>
 
-## self relations, nested documents
+---
+
+# Relationships: self reference many to many
+
+a category can have a parent category and a parent category can have multiple children
+
+---
+
+# Relationships
+
+complete self relations, nested documents
 
 ---
 
@@ -546,11 +611,6 @@ const user = await prisma.user.create({
 		userPrefrences: true
 		// userPrefrences: { spesficFields: true }
 	}
-})
-
-// create many
-const user = await prisma.user.create({
-	data: [{}, {}]
 })
 
 // find many
@@ -651,6 +711,7 @@ const posts = await prisma.post.findMany({
 ```
 
 ## update
+
 there is `update` and `updateMany`, both accept `({ where: {}, data: {} })`, and `updateMany`, it have intersting methods to update like:
 
 ```js
