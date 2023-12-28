@@ -351,10 +351,19 @@ model Profile {
 	gender	String
 	age	String
 	
-	userId	Int	@unique // it should be @unique coz we want one Profile only reference one User
+	// it should be @unique coz we want one Profile only reference one User
+	userId	Int	@unique 
 	user User	@relation(fields: [userId], refrences: [id])
 }
 ```
+
+---
+
+# Relationships: one to one
+
+<div class="grid grid-cols-2 gap-2">
+
+<div>
 
 ```js
 // 1. create user then profile
@@ -366,12 +375,30 @@ const profile = await prisma.profile.create({
 		userId: user.id
 	}
 })
+```
 
+```js
+// 2. create a user with a profile
+const user = await prisma.user.create({
+	data: {
+		profiel: {
+			create: {
+				name: faker.name.firstName(),
+			}
+		}	
+	},
+	
+	// we can also add include here, its not only for queries
+})
+```
+
+</div>
+
+```js
 // get user data only
 prisma.user.findUnique({
 	where: { id: user.id },
 })
-
 // { id: 1, email: 'test@gmail.com' }
 
 // get user data included profile all props
@@ -379,7 +406,6 @@ prisma.user.findUnique({
 	where: { id: user.id },
 	include: { profile: true }
 })
-
 // { id: 1, email: 'test@gmail.com', profile: { name: 'Sabin', age: 10, gender: 'male' } }
 
 // get only spesfic props in profile
@@ -391,19 +417,9 @@ prisma.user.findUnique({
 		}
 	}
 })
-
-// 2. create a user with a profile
-const user = await prisma.user.create({
-	data: {
-		profiel: {
-			create: {
-				name: faker.name.firstName(),
-			}
-		}	
-	},
-	// we can also add include here, its not only for queries
-})
 ```
+
+</div>
 
 ---
 
