@@ -768,8 +768,6 @@ learn more about prisma
 - https://www.youtube.com/watch?v=Q7nNbJomC0I
 - getting know about normalizing data and denormalizing
 - sql relations with update and delete cascades nad queries join
-- conceptual er diagram
-- apis (with forms specially)
 - https://www.prisma.io/ecosystem
 
 ---
