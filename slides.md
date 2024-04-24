@@ -1,21 +1,21 @@
 ---
 theme: seriph
-background: https://source.unsplash.com/collection/94734566/1920x1080
+background: https://source.unsplash.com/featured/1920x1080?prisma,prisma
 class: text-center
 highlighter: shiki
 lineNumbers: false
 info: |
-  ## prisma ORM slides
+  ## Prisma ORM slides
 drawings:
   persist: false
 transition: slide-left
-title: Welcome to Slidev
+title: Welcome to Prisma ORM
 mdc: true
 ---
 
-# Welcome to prisma ORM
+# Welcome to Prisma ORM
 
-Presentation slides for developers
+Simple and powerful object relational mapper
 
 <div class="pt-12">
   <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
@@ -41,7 +41,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # Table of contents
 
-<Toc maxDepth="1"></Toc>
+<Toc maxDepth="1" style="column-count: 3;"></Toc>
 
 ---
 layout: center
@@ -353,10 +353,6 @@ relations details with prisma client
 
 user have one profile and profile have one user
 
->there is types of one-to-one relations, like:
->- Mutual One-to-One: Both entities in the relationship are also "parents" in a one-to-one relationship with each other. For example, consider a husband entity and a wife entity, each linked to the other.
->- Exclusive One-to-One: One entity is the "owner" of the relationship, and the other is dependent on it
-
 ```prisma
 model User {
 	id	Int	@id @default(autoincrement())
@@ -374,6 +370,15 @@ model Profile {
 	user User	@relation(fields: [userId], refrences: [id])
 }
 ```
+
+<!-- 
+
+there is types of one-to-one relations, like:
+
+- Mutual One-to-One: Both entities in the relationship are also "parents" in a one-to-one relationship with each other. For example, consider a husband entity and a wife entity, each linked to the other.
+- Exclusive One-to-One: One entity is the "owner" of the relationship, and the other is dependent on it 
+
+-->
 
 ---
 
@@ -634,7 +639,7 @@ for more about relations visit [this article](https://medium.com/yavar/prisma-re
 
 ---
 
-# Relationships: onUpdate and onDelete relatio
+# Relationships: onUpdate and onDelete relations
 
 relations update and delete behavior
 
@@ -912,7 +917,7 @@ const groupPosts = await prisma.post.groupBy({
 
 # Update
 
-there is `update` and `updateMany`, both accept `({ where: {}, data: {} })`, and `updateMany`, it have intersting methods to update like:
+there is `update` and `updateMany`, both accept `({ where: {}, data: {} })`, also there is an intersting methods to update like `upsert`:
 
 <div class="grid grid-cols-2 gap-2">
 
@@ -966,8 +971,41 @@ const user = await prisma.user.upsert({
 
 # Delete
 
-work as find, we have `delete` and `deleteMany`
+work as `find`, we have `delete` and `deleteMany`
 
+```js
+// Delete a single user
+const user = await prisma.user.delete({
+  where: { name: 'rush' },
+})
+
+// Delete multiple users
+const users = await prisma.user.deleteMany({
+  where: { age: { lt: 18 } },
+})
+```
+
+<!-- 
+
+In the `delete` method, the `where` object requires you to provide a unique filter to find a single record. If the record doesn't exist, Prisma will throw an error.
+
+In the `deleteMany` method, the `where` object is optional. If you don't provide it, Prisma will delete all records of the model. Be careful with this operation as it can't be undone.
+
+Please note that unlike `update` and `updateMany`, the `delete` and `deleteMany` methods do not accept a `data` object because you're removing records, not modifying them.
+
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Client-Level Methods
+
+provide extended functionalities
+
+---
+layout: center
 ---
 
 # Transaction
@@ -985,3 +1023,4 @@ const depositeUpdate = prisma.post.update(/* ... */)
 const result = await prisma.$transaction([withDrawUpdate, depositeUpdate])
 ```
 
+<!-- add $on, $use, $extend later -->
