@@ -629,6 +629,8 @@ prisma.post.findMany({
 
 </div>
 
+<!-- 
+
 ---
 
 # Relationships: self reference
@@ -636,6 +638,8 @@ prisma.post.findMany({
 in self refrence many-to-many a category can have a parent category and a parent category can have multiple children
 
 for more about relations visit [this article](https://medium.com/yavar/prisma-relations-2ea20c42f616) and docs
+
+-->
 
 ---
 
