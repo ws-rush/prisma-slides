@@ -1,6 +1,6 @@
 # Welcome to [Slidev](https://github.com/slidevjs/slidev)!
 
->[slides preview](https://prisma-orm-slides.netlify.app)
+>[slides preview](https://github.com/ws-rush/prisma-slides))
 
 To start the slide show:
 
