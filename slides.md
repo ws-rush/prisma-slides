@@ -27,9 +27,9 @@ Simple and powerful object relational mapper
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon:edit />
   </button>
-  <a href="https://gitlab.com/ws-rush/prisma-orm" target="_blank" alt="Gitlab" title="Open in Gitlab"
+  <a href="https://github.com/ws-rush/prisma-slides" target="_blank" alt="Github" title="Open in Github"
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-gitlab />
+    <carbon-logo-github />
   </a>
 </div>
 
